@@ -2,20 +2,17 @@
 //  Photo+CoreDataProperties.swift
 //  LightSpeedSample
 //
-//  Created by Ritu on 2022-12-07.
+//  Created by Ritu on 2022-12-08.
 //
 //
 
 import Foundation
 import CoreData
 
-
-extension Photo {
-
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Photo> {
-        return NSFetchRequest<Photo>(entityName: "Photo")
+extension PhotoLocal {
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<PhotoLocal> {
+        return NSFetchRequest<PhotoLocal>(entityName: "PhotoLocal")
     }
-
     @NSManaged public var id: String?
     @NSManaged public var author: String?
     @NSManaged public var width: Int64
@@ -23,9 +20,7 @@ extension Photo {
     @NSManaged public var url: String?
     @NSManaged public var download_url: String?
     @NSManaged public var imageData: Data?
-
 }
 
-extension Photo : Identifiable {
-
+extension PhotoLocal : Identifiable {
 }

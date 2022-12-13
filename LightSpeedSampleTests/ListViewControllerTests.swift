@@ -6,30 +6,53 @@
 //
 
 import XCTest
+@testable import LightSpeedSample
 
 class ListViewControllerTests: XCTestCase {
+    
+    var viewControllerUnderTest: ListViewController!
+    var presenter: ListViewModelTests!
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        self.viewControllerUnderTest = storyboard.instantiateViewController(withIdentifier: "ListViewController") as? ListViewController
+
+        self.viewControllerUnderTest.loadView()
+        self.viewControllerUnderTest.viewDidLoad()
     }
 
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    func testHasATableView() {
+        XCTAssertNotNil(viewControllerUnderTest.tblVwObj)
+    }
+    
+    func testTableViewHasDelegate() {
+        XCTAssertNotNil(viewControllerUnderTest.tblVwObj?.delegate)
+    }
+    
+    func testTableViewConfromsToTableViewDelegateProtocol() {
+        XCTAssertTrue(viewControllerUnderTest.conforms(to: UITableViewDelegate.self))
+    }
+    
+    func testTableViewHasDataSource() {
+        XCTAssertNotNil(viewControllerUnderTest.tblVwObj?.dataSource)
+    }
+    
+    func testTableViewConformsToTableViewDataSourceProtocol() {
+        XCTAssertTrue(viewControllerUnderTest.conforms(to: UITableViewDataSource.self))
+        XCTAssertTrue(viewControllerUnderTest.responds(to: #selector(viewControllerUnderTest.tableView(_:numberOfRowsInSection:))))
+        XCTAssertTrue(viewControllerUnderTest.responds(to: #selector(viewControllerUnderTest.tableView(_:cellForRowAt:))))
     }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    func testTableViewCellHasReuseIdentifier() {
+        let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.tblVwObj!, cellForRowAt: IndexPath(row: 0, section: 0)) as? ListViewCell
+        let actualReuseIdentifer = cell?.reuseIdentifier
+        let expectedReuseIdentifier = ListViewCell.identifier
+        XCTAssertEqual(actualReuseIdentifer, expectedReuseIdentifier)
     }
+
 
 }

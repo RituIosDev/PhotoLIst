@@ -6,30 +6,82 @@
 //
 
 import XCTest
+import CoreData
+@testable import LightSpeedSample
 
 class ListViewModelTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    var viewModel: ListViewModel!
+    var mockAPIService: MockApiService!
+
+    var photoService: PhotoListService!
+    var coreDataStack: TestCoreDataStack!
+
+    override func setUp() {
+        super.setUp()
+        mockAPIService = MockApiService()
+        viewModel = ListViewModel(apiService: mockAPIService)
+        
+        coreDataStack = TestCoreDataStack()
+        photoService = PhotoListService(managedObjectContext: coreDataStack.mainContext, coreDataStack: coreDataStack)
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    override func tearDown() {
+        super.tearDown()
+
+        viewModel = nil
+        mockAPIService = nil
+        photoService = nil
+        coreDataStack = nil
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func test_get_data_from_server() {
+        // Given
+        mockAPIService.completePhotos = [Photos]()
+
+        // When
+        viewModel.getDataFromServer()
+
+        // Assert
+        XCTAssertTrue(mockAPIService!.isFetchPopularPhotoCalled)
+    }
+    
+    func test_fetch_photo_fail() {
+        let error = NSError()
+        viewModel.getDataFromServer()
+        mockAPIService.fetchFail(error: error)
+        XCTAssertEqual( "", "")
+    }
+    
+    func test_add_data_local() {
+        let randomElement = Photos(id: "First", author: "Neil", width: 100, height: 100, url: "www.google.com", download_url: "www.google.com", imageData: Data())
+        let photoObj = photoService.add(randomElement) { status, error in
+            XCTAssertTrue(status == true)
         }
+        XCTAssertNotNil(photoObj, "Report should not be nil")
+        XCTAssertTrue(photoObj.author == "Neil")
+        XCTAssertTrue(photoObj.width == 100)
+        XCTAssertTrue(photoObj.height == 100)
+        XCTAssertTrue(photoObj.url == "www.google.com")
+        XCTAssertNotNil(photoObj.id, "First")
     }
+
+
+    func testGetReports() {
+        let randomElement = Photos(id: "First", author: "Neil", width: 100, height: 100, url: "www.google.com", download_url: "www.google.com", imageData: Data())
+
+      let newPhoto = self.photoService.add(randomElement) { status, error in
+      }
+
+      let getPhotos = photoService.getPhotos()
+
+      XCTAssertNotNil(getPhotos)
+      XCTAssertTrue(getPhotos?.count == 1)
+      XCTAssertTrue(newPhoto.id == getPhotos?.first?.id)
+    }
+    
 
 }
+
+

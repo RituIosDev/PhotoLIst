@@ -7,6 +7,8 @@
 
 import UIKit
 
-class ListViewCellModel: NSObject {
-
+struct ListViewCellModel {
+    let lblAuthor: String
+    let imgDisplay: Data
+    let photoId : String
 }

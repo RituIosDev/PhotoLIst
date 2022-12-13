@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21C52" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Photo" representedClassName="Photo" syncable="YES">
+    <entity name="PhotoLocal" representedClassName="PhotoLocal" syncable="YES">
         <attribute name="author" optional="YES" attributeType="String"/>
         <attribute name="download_url" optional="YES" attributeType="String"/>
         <attribute name="height" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -10,6 +10,6 @@
         <attribute name="width" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <elements>
-        <element name="Photo" positionX="-63" positionY="-18" width="128" height="134"/>
+        <element name="PhotoLocal" positionX="-63" positionY="-18" width="128" height="134"/>
     </elements>
 </model>
